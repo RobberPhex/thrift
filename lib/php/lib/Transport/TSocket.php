@@ -38,7 +38,7 @@ class TSocket extends TTransport
      *
      * @var resource
      */
-    protected $handle_ = null;
+    private $handle_ = null;
 
     /**
      * Remote hostname
@@ -55,13 +55,31 @@ class TSocket extends TTransport
     protected $port_ = '9090';
 
     /**
+     * Connect timeout in seconds.
+     *
+     * Combined with connTimeoutUsec this is used for connect timeouts.
+     *
+     * @var int
+     */
+    private $connTimeoutSec_ = 0;
+
+    /**
+     * Connect timeout in useconds.
+     *
+     * Combined with connTimeoutUsec this is used for connect timeouts.
+     *
+     * @var int
+     */
+    private $connTimeoutUsec_ = 100000;
+
+    /**
      * Send timeout in seconds.
      *
      * Combined with sendTimeoutUsec this is used for send timeouts.
      *
      * @var int
      */
-    protected $sendTimeoutSec_ = 0;
+    private $sendTimeoutSec_ = 0;
 
     /**
      * Send timeout in microseconds.
@@ -70,7 +88,7 @@ class TSocket extends TTransport
      *
      * @var int
      */
-    protected $sendTimeoutUsec_ = 100000;
+    private $sendTimeoutUsec_ = 100000;
 
     /**
      * Recv timeout in seconds
@@ -79,7 +97,7 @@ class TSocket extends TTransport
      *
      * @var int
      */
-    protected $recvTimeoutSec_ = 0;
+    private $recvTimeoutSec_ = 0;
 
     /**
      * Recv timeout in microseconds
@@ -88,7 +106,7 @@ class TSocket extends TTransport
      *
      * @var int
      */
-    protected $recvTimeoutUsec_ = 750000;
+    private $recvTimeoutUsec_ = 750000;
 
     /**
      * Persistent socket or plain?
@@ -138,6 +156,18 @@ class TSocket extends TTransport
     public function setHandle($handle)
     {
         $this->handle_ = $handle;
+    }
+
+    /**
+     * Sets the send timeout.
+     *
+     * @param int $timeout Timeout in milliseconds.
+     */
+    public function setConnTimeout($timeout)
+    {
+        $this->connTimeoutSec_ = floor($timeout / 1000);
+        $this->connTimeoutUsec_ =
+            ($timeout - ($this->connTimeoutSec_ * 1000)) * 1000;
     }
 
     /**
@@ -222,20 +252,20 @@ class TSocket extends TTransport
         }
 
         if ($this->persist_) {
-            $this->handle_ = @pfsockopen(
+            $this->handle_ = pfsockopen(
                 $this->host_,
                 $this->port_,
                 $errno,
                 $errstr,
-                $this->sendTimeoutSec_ + ($this->sendTimeoutUsec_ / 1000000)
+                $this->connTimeoutSec_ + ($this->connTimeoutUsec_ / 1000000)
             );
         } else {
-            $this->handle_ = @fsockopen(
+            $this->handle_ = fsockopen(
                 $this->host_,
                 $this->port_,
                 $errno,
                 $errstr,
-                $this->sendTimeoutSec_ + ($this->sendTimeoutUsec_ / 1000000)
+                $this->connTimeoutSec_ + ($this->connTimeoutUsec_ / 1000000)
             );
         }
 
@@ -260,8 +290,10 @@ class TSocket extends TTransport
      */
     public function close()
     {
-        @fclose($this->handle_);
-        $this->handle_ = null;
+        if (!$this->persist_) {
+            fclose($this->handle_);
+            $this->handle_ = null;
+        }
     }
 
     /**
@@ -275,33 +307,48 @@ class TSocket extends TTransport
      */
     public function read($len)
     {
+        if ($len <= 0) {
+            throw new TTransportException("TSocket: read len $len invalid");
+        }
         $null = null;
         $read = array($this->handle_);
-        $readable = @stream_select(
-            $read,
-            $null,
-            $null,
-            $this->recvTimeoutSec_,
-            $this->recvTimeoutUsec_
-        );
 
-        if ($readable > 0) {
-            $data = fread($this->handle_, $len);
-            if ($data === false) {
-                throw new TTransportException('TSocket: Could not read ' . $len . ' bytes from ' .
+        $recvTimeoutSec_ = $this->recvTimeoutSec_;
+        $recvTimeoutUsec_ = $this->recvTimeoutUsec_;
+        $dataTotal = "";
+        do {
+            $readable = self::stream_select_ex(
+                $read,
+                $null,
+                $null,
+                $recvTimeoutSec_,
+                $recvTimeoutUsec_
+            );
+
+            if ($readable > 0) {
+                $data = stream_socket_recvfrom($this->handle_, $len);
+                if ($data === false) {
+                    throw new TTransportException('TSocket: Could not read ' . $len . ' bytes from ' .
+                        $this->host_ . ':' . $this->port_);
+                } elseif ($data == '' && feof($this->handle_)) {
+                    throw new TTransportException("TSocket read 0 bytes,want $len");
+                }
+                $dataTotal .= $data;
+                $len -= strlen($data);
+            } elseif ($readable === 0) {
+                throw new TTransportException('TSocket: timed out reading ' . $len . ' bytes from ' .
                     $this->host_ . ':' . $this->port_);
-            } elseif ($data == '' && feof($this->handle_)) {
-                throw new TTransportException('TSocket read 0 bytes');
+            } else {
+                throw new TTransportException('TSocket: Could not read ' . $len . ' bytes from ' .
+                    $this->host_ . ':' . $this->port_ . " " . self::sockErr_());
             }
+        } while ($len > 0 && ($recvTimeoutSec_ != 0 || $recvTimeoutUsec_ != 0));
 
-            return $data;
-        } elseif ($readable === 0) {
+        if ($len > 0) {
             throw new TTransportException('TSocket: timed out reading ' . $len . ' bytes from ' .
-                $this->host_ . ':' . $this->port_);
-        } else {
-            throw new TTransportException('TSocket: Could not read ' . $len . ' bytes from ' .
-                $this->host_ . ':' . $this->port_);
+                $this->host_ . ':' . $this->port_ . ' ' . self::sockErr());
         }
+        return $dataTotal;
     }
 
     /**
@@ -314,19 +361,21 @@ class TSocket extends TTransport
         $null = null;
         $write = array($this->handle_);
 
+        $sendTimeoutSec = $this->sendTimeoutSec_;
+        $sendTimeoutUsec = $this->sendTimeoutUsec_;
         // keep writing until all the data has been written
         while (TStringFuncFactory::create()->strlen($buf) > 0) {
             // wait for stream to become available for writing
-            $writable = @stream_select(
+            $writable = self::stream_select_ex(
                 $null,
                 $write,
                 $null,
-                $this->sendTimeoutSec_,
-                $this->sendTimeoutUsec_
+                $sendTimeoutSec,
+                $sendTimeoutUsec
             );
             if ($writable > 0) {
                 // write buffer to stream
-                $written = fwrite($this->handle_, $buf);
+                $written = stream_socket_sendto($this->handle_, $buf);
                 if ($written === -1 || $written === false) {
                     throw new TTransportException(
                         'TSocket: Could not write ' . TStringFuncFactory::create()->strlen($buf) . ' bytes ' .
@@ -361,5 +410,32 @@ class TSocket extends TTransport
     public function flush()
     {
         // no-op
+    }
+
+    /**
+     * stream_select_ex
+     *
+     * Improvement of stream_select. The tv_sec and tv_usec will be updated after the function
+     *
+     */
+    public static function stream_select_ex(&$read, &$write, &$except, &$tv_sec, &$tv_usec)
+    {
+        $timeout = $tv_sec * 1000000 + $tv_usec;
+        $begin = gettimeofday();
+        $ret = stream_select($read, $write, $except, $tv_sec, $tv_usec);
+        $end = gettimeofday();
+
+        $dt = $end['usec'] + $end['sec'] * 1000000 - $begin['usec'] - $begin['sec'] * 1000000;
+        $rest_time = max($timeout - $dt, 0);
+        $tv_sec = floor($rest_time / 1000000);
+        $tv_usec = $rest_time % 1000000;
+
+        return $ret;
+    }
+
+    private static function sockErr_()
+    {
+        $errno = socket_last_error();
+        return "errno:" . $errno . " msg:" . socket_strerror($errno) . " ";
     }
 }
