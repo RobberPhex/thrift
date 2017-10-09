@@ -55,27 +55,6 @@
 #error Unknown __BYTE_ORDER
 #endif
 
-enum TType {
-  T_STOP       = 0,
-  T_VOID       = 1,
-  T_BOOL       = 2,
-  T_BYTE       = 3,
-  T_I08        = 3,
-  T_I16        = 6,
-  T_I32        = 8,
-  T_U64        = 9,
-  T_I64        = 10,
-  T_DOUBLE     = 4,
-  T_STRING     = 11,
-  T_UTF7       = 11,
-  T_STRUCT     = 12,
-  T_MAP        = 13,
-  T_SET        = 14,
-  T_LIST       = 15,
-  T_UTF8       = 16,
-  T_UTF16      = 17
-};
-
 const int32_t VERSION_MASK = 0xffff0000;
 const int32_t VERSION_1 = 0x80010000;
 const int8_t T_CALL = 1;
@@ -84,30 +63,6 @@ const int8_t T_EXCEPTION = 3;
 // tprotocolexception
 const int INVALID_DATA = 1;
 const int BAD_VERSION = 4;
-
-static zend_function_entry thrift_protocol_functions[] = {
-  PHP_FE(thrift_protocol_write_binary, nullptr)
-  PHP_FE(thrift_protocol_read_binary, nullptr)
-  PHP_FE(thrift_protocol_read_binary_after_message_begin, nullptr)
-  {nullptr, nullptr, nullptr}
-};
-
-zend_module_entry thrift_protocol_module_entry = {
-  STANDARD_MODULE_HEADER,
-  "thrift_protocol",
-  thrift_protocol_functions,
-  nullptr,
-  nullptr,
-  nullptr,
-  nullptr,
-  nullptr,
-  "1.0",
-  STANDARD_MODULE_PROPERTIES
-};
-
-#ifdef COMPILE_DL_THRIFT_PROTOCOL
-ZEND_GET_MODULE(thrift_protocol)
-#endif
 
 class PHPExceptionWrapper : public std::exception {
 public:
