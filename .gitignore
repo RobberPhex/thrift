@@ -221,7 +221,6 @@ project.lock.json
 /lib/erl/test/Thrift_omit_without.thrift
 /lib/haxe/test/bin
 /lib/hs/dist
-/lib/java/build
 /lib/js/dist
 /lib/js/doc
 /lib/js/package-lock.json
