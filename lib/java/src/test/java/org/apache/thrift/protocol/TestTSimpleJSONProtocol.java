@@ -53,6 +53,9 @@ public class TestTSimpleJSONProtocol extends TestCase {
     holyMoley.unsetBonks();
     holyMoley.unsetContain();
     holyMoley.write(proto);
+    System.out.println("testHolyMoley");
+    System.out.println(bufToString());
+    System.out.println("testHolyMoley");
     assertEquals("{\"big\":[{\"im_true\":1,\"im_false\":0,\"a_bite\":35,\"integer16\":27000,\"integer32\":16777216,\"integer64\":6000000000,\"double_precision\":3.141592653589793,\"some_characters\":\"JSON THIS! \\\"\\u0001\",\"zomg_unicode\":\"ӀⅮΝ Нοⅿоɡгаρℎ Αttαⅽκ�‼\",\"what_who\":0,\"base64\":\"base64\",\"byte_list\":[1,2,3],\"i16_list\":[1,2,3],\"i64_list\":[1,2,3]},{\"im_true\":1,\"im_false\":0,\"a_bite\":-42,\"integer16\":27000,\"integer32\":16777216,\"integer64\":6000000000,\"double_precision\":3.141592653589793,\"some_characters\":\"JSON THIS! \\\"\\u0001\",\"zomg_unicode\":\"ӀⅮΝ Нοⅿоɡгаρℎ Αttαⅽκ�‼\",\"what_who\":0,\"base64\":\"base64\",\"byte_list\":[1,2,3],\"i16_list\":[1,2,3],\"i64_list\":[1,2,3]}]}", bufToString());
   }
 

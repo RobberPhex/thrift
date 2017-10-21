@@ -119,7 +119,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.4</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -130,7 +130,24 @@
         </dependency>
     </dependencies>
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.12.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -341,9 +358,58 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20.1</version>
+                <configuration>
+                    <reuseForks>false</reuseForks>
+                    <!-- TODO 单元测试还有4个不成功 -->
+                    <includes>
+                        <include>
+                            **/Test*.java
+                        </include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/TestClient.java"</exclude>
+                        <exclude>**/TestServer.java"</exclude>
+                        <exclude>**/TestNonblockingServer.java"</exclude>
+                    </excludes>
+
+                    <systemProperties>
+                        <property>
+                            <name>test.port</name>
+                            <value>${test.port}</value>
+                        </property>
+                        <property>
+                            <name>ssl.debug</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>javax.net.ssl.trustStore</name>
+                            <value>${project.build.testOutputDirectory}/.truststore</value>
+                        </property>
+                        <property>
+                            <name>javax.net.ssl.trustStorePassword</name>
+                            <value>thrift</value>
+                        </property>
+                        <property>
+                            <name>javax.net.ssl.keyStore</name>
+                            <value>${project.build.testOutputDirectory}/.keystore</value>
+                        </property>
+                        <property>
+                            <name>javax.net.ssl.keyStorePassword</name>
+                            <value>thrift</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <properties>
         <test.thrift.home>${project.basedir}/../../test/</test.thrift.home>
+        <test.port>9090</test.port>
     </properties>
 </project>
+

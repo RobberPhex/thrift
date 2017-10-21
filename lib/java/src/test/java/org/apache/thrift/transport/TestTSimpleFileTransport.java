@@ -40,7 +40,7 @@ public class TestTSimpleFileTransport extends TestCase {
     
     //Test read side
     TSimpleFileTransport trans = new TSimpleFileTransport(tempFilePathName.toString(),true, false);
-    assert(trans_write.isOpen());
+    assert(trans.isOpen());
     
     //Simple file trans provides no buffer access
     assert(0 == trans.getBufferPosition());

@@ -86,7 +86,6 @@ public class TestTSaslTransports extends TestCase {
       this.password = password;
     }
 
-    @Override
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
       for (Callback c : callbacks) {
         if (c instanceof NameCallback) {
@@ -264,7 +263,7 @@ public class TestTSaslTransports extends TestCase {
     new TestTSaslTransportsWithServer().testIt();
   }
 
-  private static class TestTSaslTransportsWithServer extends ServerTestBase {
+  public static class TestTSaslTransportsWithServer extends ServerTestBase {
 
     private Thread serverThread;
     private TServer server;

@@ -22,7 +22,6 @@ public abstract class TBaseProcessor<I> implements TProcessor {
     return Collections.unmodifiableMap(processMap);
   }
 
-  @Override
   public boolean process(TProtocol in, TProtocol out) throws TException {
     TMessage msg = in.readMessageBegin();
     ProcessFunction fn = processMap.get(msg.name);

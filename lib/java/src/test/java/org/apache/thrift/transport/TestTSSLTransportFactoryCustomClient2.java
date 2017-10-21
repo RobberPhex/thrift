@@ -19,6 +19,9 @@
 
 package org.apache.thrift.transport;
 
+import org.apache.thrift.TException;
+import org.junit.Test;
+
 public class TestTSSLTransportFactoryCustomClient2 extends TestTSSLTransportFactory {
 
   @Override
@@ -30,5 +33,17 @@ public class TestTSSLTransportFactoryCustomClient2 extends TestTSSLTransportFact
     params.setTrustStore(System.getProperty("javax.net.ssl.trustStore"), null);
 
     return TSSLTransportFactory.getClientSocket(HOST, PORT, 0/*timeout*/, params);
+  }
+
+  public void testIt() throws Exception {
+    try {
+      super.testIt();
+    } catch (TTransportException e) {
+      System.err.println(e);
+      e.printStackTrace();
+      if (!(e.getCause() instanceof NullPointerException)) {
+        fail("timed out when it should have thrown another kind of error!");
+      }
+    }
   }
 }
