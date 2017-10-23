@@ -30,6 +30,10 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.apache.thrift.transport.TTransportFactory;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.fail;
 import thrift.test.ThriftTest;
 
 public class TestNonblockingServer extends ServerTestBase {
@@ -83,7 +87,7 @@ public class TestNonblockingServer extends ServerTestBase {
     return new TFramedTransport(underlyingTransport);
   }
 
-
+  @Test
   public void testCleanupAllSelectionKeys() throws Exception {
     for (TProtocolFactory protoFactory : getProtocols()) {
       TestHandler handler = new TestHandler();

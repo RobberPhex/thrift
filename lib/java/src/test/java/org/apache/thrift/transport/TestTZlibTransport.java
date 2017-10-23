@@ -29,9 +29,10 @@ import java.util.zip.DataFormatException;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class TestTZlibTransport extends TestCase {
+public class TestTZlibTransport {
 
   protected TTransport getTransport(TTransport underlying) {
     return new TZlibTransport(underlying);
@@ -45,6 +46,7 @@ public class TestTZlibTransport extends TestCase {
     return result;
   }
 
+  @Test
   public void testClose() throws TTransportException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     WriteCountingTransport countingTrans = new WriteCountingTransport(new TIOStreamTransport(new BufferedOutputStream
@@ -55,6 +57,7 @@ public class TestTZlibTransport extends TestCase {
     trans.close();
   }
 
+  @Test
   public void testCloseOpen() throws TTransportException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     TTransport trans = getTransport(new TIOStreamTransport(baos));
@@ -70,6 +73,7 @@ public class TestTZlibTransport extends TestCase {
     transRead.close();
   }
 
+  @Test
   public void testRead() throws IOException, TTransportException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(baos);
@@ -103,6 +107,7 @@ public class TestTZlibTransport extends TestCase {
     assertEquals(1, countTrans.readCount);
   }
 
+  @Test
   public void testWrite() throws TTransportException, IOException, DataFormatException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     WriteCountingTransport countingTrans = new WriteCountingTransport(new TIOStreamTransport(new BufferedOutputStream(baos)));

@@ -21,6 +21,7 @@ package org.apache.thrift.transport;
 
 import org.apache.thrift.TException;
 import org.junit.Test;
+import static org.junit.Assert.fail;
 
 public class TestTSSLTransportFactoryCustomClient2 extends TestTSSLTransportFactory {
 

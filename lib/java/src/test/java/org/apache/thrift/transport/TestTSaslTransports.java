@@ -45,6 +45,7 @@ import org.apache.thrift.server.ServerTestBase;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TSimpleServer;
 import org.apache.thrift.server.TServer.Args;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -263,7 +264,8 @@ public class TestTSaslTransports extends TestCase {
     new TestTSaslTransportsWithServer().testIt();
   }
 
-  public static class TestTSaslTransportsWithServer extends ServerTestBase {
+  @Ignore
+  private static class TestTSaslTransportsWithServer extends ServerTestBase {
 
     private Thread serverThread;
     private TServer server;

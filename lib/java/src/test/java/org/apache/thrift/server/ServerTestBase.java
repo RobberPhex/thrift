@@ -43,6 +43,13 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportFactory;
 import org.apache.thrift.transport.TFramedTransport.Factory;
 
+import org.junit.After;
+import org.junit.Assert;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 import thrift.test.Insanity;
 import thrift.test.Numberz;
 import thrift.test.ThriftTest;
@@ -51,7 +58,7 @@ import thrift.test.Xception2;
 import thrift.test.Xtruct;
 import thrift.test.Xtruct2;
 
-public abstract class ServerTestBase extends TestCase {
+public abstract class ServerTestBase {
 
   public static class TestHandler implements ThriftTest.Iface {
 
@@ -310,7 +317,7 @@ public abstract class ServerTestBase extends TestCase {
 
   private void testDouble(ThriftTest.Client testClient) throws TException {
     double dub = testClient.testDouble(5.325098235);
-    assertEquals(5.325098235, dub);
+    assertEquals(5.325098235, dub, 0.000000001);
   }
 
   private void testEnum(ThriftTest.Client testClient) throws TException {
@@ -385,6 +392,7 @@ public abstract class ServerTestBase extends TestCase {
       return false;
   }
 
+  @Test
   public void testIt() throws Exception {
 
     for (TProtocolFactory protoFactory : getProtocols()) {
@@ -534,6 +542,7 @@ public abstract class ServerTestBase extends TestCase {
     }
   }
 
+  @Test
   public void testTransportFactory() throws Exception {
     for (TProtocolFactory protoFactory : getProtocols()) {
       TestHandler handler = new TestHandler();
