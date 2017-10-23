@@ -20,29 +20,23 @@
 export CLASSPATH
 
 all-local:
-	$(ANT) $(ANT_FLAGS)
+	$(MAVEN) $(MAVEN_FLAGS) package -DskipTests=true
 
 install-exec-hook:
-	$(ANT) $(ANT_FLAGS) install -Dinstall.path=$(DESTDIR)$(JAVA_PREFIX) \
-		-Dinstall.javadoc.path=$(DESTDIR)$(docdir)/java
+	$(MAVEN) $(MAVEN_FLAGS) install
 
 # Make sure this doesn't fail if ant is not configured.
 clean-local:
-	ANT=$(ANT) ; if test -z "$$ANT" ; then ANT=: ; fi ; \
-	$$ANT $(ANT_FLAGS) clean
-
-precross: $(THRIFT)
-	$(ANT) $(ANT_FLAGS) compile-test
+	MAVEN=$(MAVEN) ; if test -z "$$MAVEN" ; then MAVEN=: ; fi ; \
+	$$MAVEN $(MAVEN_FLAGS) clean
 
 check-local: all
-	$(ANT) $(ANT_FLAGS) test
+	$(MAVEN) $(MAVEN_FLAGS) test
 
 EXTRA_DIST = \
-	build.xml \
-	build.properties \
+	pom.xml \
 	CMakeLists.txt \
 	coding_standards.md \
 	android \
 	src \
-	test \
 	README.md

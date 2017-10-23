@@ -118,7 +118,7 @@ AC_DEFUN([AX_CHECK_JAVA_CLASS],
 AC_DEFUN([AX_CHECK_ANT_VERSION],
          [
           AC_MSG_CHECKING(for ant version > $2)
-          ANT_VALID=`expr "x$(printf "$2\n$($1 -version 2>/dev/null | sed -n 's/.*version \(@<:@0-9\.@:>@*\).*/\1/p')" | sort -t '.' -k 1,1 -k 2,2 -k 3,3 -g | sed -n 1p)" = "x$2"`
+          ANT_VALID=`expr "x$(printf "$2\n$($1 -version 2>/dev/null | sed -n 's/.*version \([0-9\.]*\).*/\1/p')" | sort -t '.' -k 1,1 -k 2,2 -k 3,3 -g | sed -n 1p)" = "x$2"`
           if test "x$ANT_VALID" = "x1" ; then
             AC_MSG_RESULT(yes)
           else
@@ -127,3 +127,15 @@ AC_DEFUN([AX_CHECK_ANT_VERSION],
           fi
           ])
 
+
+AC_DEFUN([AX_CHECK_MAVEN_VERSION],
+         [
+          AC_MSG_CHECKING(for maven version > $2)
+          MAVEN_VALID=`expr "x$(printf "$2\n$($1 -version 2>/dev/null | sed -n 's/.*Apache Maven \([0-9\.]*\).*/\1/p')" | sort -t '.' -k 1,1 -k 2,2 -k 3,3 -g | sed -n 1p)" = "x$2"`
+          if test "x$MAVEN_VALID" = "x1" ; then
+            AC_MSG_RESULT(yes)
+          else
+            AC_MSG_RESULT(no)
+            MAVEN=""
+          fi
+          ])

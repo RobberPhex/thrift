@@ -53,28 +53,27 @@ else(ANDROID)
     )
     add_custom_command(
         OUTPUT ${ThriftJava_ARTIFACTS}
-        COMMAND ${Ant_EXECUTABLE} ${ANT_FLAGS} -Dbuild.dir="${CMAKE_CURRENT_BINARY_DIR}" -f build.xml
-        MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/build.xml
+        COMMAND ${Maven_EXECUTABLE} ${MAVEN_FLAGS} -Dbuild.dir="${CMAKE_CURRENT_BINARY_DIR}" -f pom.xml
+        MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/pom.xml
         DEPENDS ${ThriftJava_SOURCES}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
     add_custom_target(ThriftJava ALL
-        COMMENT "Building Java library using Ant"
+        COMMENT "Building Java library using Maven"
         DEPENDS ${ThriftJava_ARTIFACTS}
     )
 
-    # Hook the ant install task into CMake install
+    # Hook the mvn install task into CMake install
     install(CODE "execute_process(
-        COMMAND ${Ant_EXECUTABLE} ${ANT_FLAGS} install
-        -Dbuild.dir=\"${CMAKE_CURRENT_BINARY_DIR}\"
-        -Dinstall.path=\"${JAVA_INSTALL_DIR}\" -Dinstall.javadoc.path=\"${JAVA_DOC_INSTALL_DIR}\" -f build.xml
+        COMMAND ${Maven_EXECUTABLE} ${MAVEN_FLAGS} install
+        -Dinstall.path=\"${JAVA_INSTALL_DIR}\" -Dinstall.javadoc.path=\"${JAVA_DOC_INSTALL_DIR}\" -f pom.xml
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )")
 
     if(BUILD_TESTING)
         add_test(NAME JavaTest
-                 COMMAND ${Ant_EXECUTABLE} ${ANT_FLAGS} -Dbuild.dir=${CMAKE_CURRENT_BINARY_DIR} -Dthrift.compiler=${THRIFT_COMPILER} -f build.xml test
+                 COMMAND ${Maven_EXECUTABLE} ${MAVEN_FLAGS} -Dthrift.compiler=${THRIFT_COMPILER} -f build.xml test
                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
     endif()
 endif(ANDROID)
