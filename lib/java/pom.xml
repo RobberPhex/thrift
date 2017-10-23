@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.thrift</groupId>
     <artifactId>libthrift</artifactId>
-    <version>0.10.0</version>
-    <packaging>jar</packaging>
+    <version>0.10.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
     <name>Apache Thrift</name>
-    <description>Thrift is a software framework for scalable cross-language services development.</description>
+    <description>Apache Thrift library</description>
     <url>http://thrift.apache.org</url>
     <licenses>
         <license>
@@ -364,8 +364,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.20.1</version>
                 <configuration>
-                    <reuseForks>false</reuseForks>
-                    <!-- TODO 单元测试还有4个不成功 -->
                     <includes>
                         <include>
                             **/Test*.java
@@ -405,6 +403,81 @@
                     </systemProperties>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/../../</directory>
+                                    <includes>
+                                        <include>LICENSE</include>
+                                        <include>NOTICE</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.groupId}</Bundle-SymbolicName>
+                        <ActivationPolicy>lazy</ActivationPolicy>
+                        <Export-Package>
+                            org.apache.thrift.async;uses:="org.apache.thrift.protocol,org.apache.thrift.transport,org.slf4j,org.apache.thrift";version="${project.version}",
+                            org.apache.thrift.protocol;uses:="org.apache.thrift.transport,org.apache.thrift,org.apache.thrift.scheme";version="${project.version}",
+                            org.apache.thrift.server;uses:="org.apache.thrift.transport,org.apache.thrift.protocol,org.apache.thrift,org.slf4j,javax.servlet,javax.servlet.http";version="${project.version}",
+                            org.apache.thrift.transport;uses:="org.apache.thrift.protocol,org.apache.thrift,org.apache.http.client,org.apache.http.params,org.apache.http.entity,org.apache.http.client.methods,org.apache.http,org.slf4j,javax.net.ssl,javax.net,javax.security.sasl,javax.security.auth.callback";version="${project.version}",
+                            org.apache.thrift;uses:="org.apache.thrift.protocol,org.apache.thrift.async,org.apache.thrift.server,org.apache.thrift.transport,org.slf4j,org.apache.log4j,org.apache.thrift.scheme";version="${project.version}",
+                            org.apache.thrift.meta_data;uses:="org.apache.thrift";version="${project.version}",
+                            org.apache.thrift.scheme;uses:="org.apache.thrift.protocol,org.apache.thrift";version="${project.version}"
+                        </Export-Package>
+                        <Import-Package>
+                            javax.net,
+                            javax.net.ssl,
+                            javax.security.auth.callback,
+                            javax.security.sasl,
+                            javax.servlet;resolution:=optional,
+                            javax.servlet.http;resolution:=optional,
+                            org.slf4j;resolution:=optional;version="[1.4,2)",
+                            org.apache.http.client;resolution:=optional,
+                            org.apache.http.params;resolution:=optional,
+                            org.apache.http.entity;resolution:=optional,
+                            org.apache.http.client.methods;resolution:=optional,
+                            org.apache.http;resolution:=optional
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <properties>
@@ -412,4 +485,3 @@
         <test.port>9090</test.port>
     </properties>
 </project>
-
