@@ -53,7 +53,7 @@ public class TestStruct extends TestCase {
     TSerializer   binarySerializer   = new   TSerializer(new TBinaryProtocol.Factory());
     TDeserializer binaryDeserializer = new TDeserializer(new TBinaryProtocol.Factory());
 
-    OneOfEach ooe = Fixtures.oneOfEach;
+    OneOfEach ooe = new OneOfEach();
 
     Nesting n = new Nesting();
     n.my_ooe = ooe;
