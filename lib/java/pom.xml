@@ -194,6 +194,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/ThriftTest.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -228,6 +229,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/DebugProtoTest.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -245,6 +247,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/OptionalRequiredTest.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -262,6 +265,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/JavaBeansTest.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -279,6 +283,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/ManyOptionals.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -296,6 +301,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/FullCamelTest.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -313,6 +319,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/ReuseObjects.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -330,6 +337,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/JavaDeepCopyTest.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -347,6 +355,7 @@
                                 <argument>${project.basedir}/target/generated-test-sources</argument>
                                 <argument>${test.thrift.home}/EnumContainersTest.thrift</argument>
                             </arguments>
+                            <skip>${maven.test.skip}</skip>
                         </configuration>
                     </execution>
                 </executions>
