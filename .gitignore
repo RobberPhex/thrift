@@ -45,6 +45,7 @@ project.lock.json
 .svn
 .vagrant
 
+/.gradle/
 /contrib/.vagrant/
 /aclocal/libtool.m4
 /aclocal/lt*.m4
