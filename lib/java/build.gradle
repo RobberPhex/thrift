@@ -1,13 +1,78 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 apply plugin: 'java'
 
 repositories {
-    mavenCentral()
+  mavenCentral()
+}
+
+sourceSets {
+  test {
+    java.srcDirs = ['src/test/', 'gen-fullcamel', 'gen-java', 'gen-javabean', 'gen-javareuse']
+  }
+}
+
+ext {
+  thriftCompiler = "thrift"
+  gen = "${projectDir}/gen-java/"
+  genbean = "${projectDir}/gen-javabean/"
+  genfullcamel = "${projectDir}/gen-fullcamel/"
+  genreuse = "${projectDir}/gen-javareuse/"
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-log4j12:1.7.12'
-    compile 'org.apache.httpcomponents:httpclient:4.4.1'
-    compile 'org.apache.httpcomponents:httpcore:4.4.1'
-    compileOnly 'javax.servlet:servlet-api:2.5'
-    testCompile 'junit:junit:4.11'
+  compile 'org.slf4j:slf4j-log4j12:1.7.12'
+  compile 'org.apache.httpcomponents:httpclient:4.4.1'
+  compile 'org.apache.httpcomponents:httpcore:4.4.1'
+  compileOnly 'javax.servlet:servlet-api:2.5'
+  testCompile 'junit:junit:4.11'
+  testCompile 'org.mockito:mockito-all:1.9.5'
+}
+
+task sourceJar(type: Jar) {
+  classifier 'sources'
+  from sourceSets.main.allJava
+}
+
+task generate {
+  doFirst{
+    new File("${genreuse}").mkdirs()
+    new File("${genreuse}").mkdirs()
+    new File("${genfullcamel}").mkdirs()
+    new File("${genbean}").mkdirs()
+  }
+  doLast {
+    exec {commandLine "${thriftCompiler}", "--gen", "java", "${projectDir}/../../test/ThriftTest.thrift"}
+    exec {commandLine "${thriftCompiler}", "--gen", "java", "${projectDir}/../../test/JavaTypes.thrift"}
+    exec {commandLine "${thriftCompiler}", "--gen", "java", "${projectDir}/../../test/DebugProtoTest.thrift"}
+    exec {commandLine "${thriftCompiler}", "--gen", "java", "${projectDir}/../../test/OptionalRequiredTest.thrift"}
+    exec {commandLine "${thriftCompiler}", "--gen", "java", "${projectDir}/../../test/ManyOptionals.thrift"}
+    exec {commandLine "${thriftCompiler}", "--gen", "java", "${projectDir}/../../test/JavaDeepCopyTest.thrift"}
+    exec {commandLine "${thriftCompiler}", "--gen", "java", "${projectDir}/../../test/EnumContainersTest.thrift"}
+
+    exec {commandLine "${thriftCompiler}", "--gen", "java:beans,nocamel", "-out", "${genbean}", "${projectDir}/../../test/JavaBeansTest.thrift"}
+
+    exec {commandLine "${thriftCompiler}", "--gen", "java:fullcamel", "-out", "${genfullcamel}", "${projectDir}/../../test/FullCamelTest.thrift"}
+
+    exec {commandLine "${thriftCompiler}", "--gen", "java:reuse-objects", "-out", "${genreuse}", "${projectDir}/../../test/ReuseObjects.thrift"}
+  }
+}
+
+clean.doFirst {
+  delete "${gen}"
+  delete "${genbean}"
+  delete "${genfullcamel}"
+  delete "${genreuse}"
 }
