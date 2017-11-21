@@ -76,3 +76,5 @@ clean.doFirst {
   delete "${genfullcamel}"
   delete "${genreuse}"
 }
+
+compileTestJava.dependsOn(generate)
