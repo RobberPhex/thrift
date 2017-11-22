@@ -20,7 +20,7 @@ repositories {
 
 sourceSets {
   test {
-    java.srcDirs = ['src/test/', 'gen-fullcamel', 'gen-java', 'gen-javabean', 'gen-javareuse']
+    java.srcDirs = ['src/test/java/', 'gen-fullcamel', 'gen-java', 'gen-javabean', 'gen-javareuse']
   }
 }
 
@@ -37,8 +37,8 @@ dependencies {
   compile 'org.apache.httpcomponents:httpclient:4.4.1'
   compile 'org.apache.httpcomponents:httpcore:4.4.1'
   compileOnly 'javax.servlet:servlet-api:2.5'
-  testCompile 'junit:junit:4.11'
-  testCompile 'org.mockito:mockito-all:1.9.5'
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
 task sourceJar(type: Jar) {
@@ -75,6 +75,14 @@ clean.doFirst {
   delete "${genbean}"
   delete "${genfullcamel}"
   delete "${genreuse}"
+}
+
+test {
+  systemProperty "test.port", "9090"
+  systemProperty "javax.net.ssl.trustStore", "${buildDir}/resources/test/.truststore"
+  systemProperty "javax.net.ssl.trustStorePassword", "thrift"
+  systemProperty "javax.net.ssl.keyStore", "${buildDir}/resources/test/.keystore"
+  systemProperty "javax.net.ssl.keyStorePassword", "thrift"
 }
 
 compileTestJava.dependsOn(generate)
