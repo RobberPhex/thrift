@@ -13,9 +13,26 @@
  */
 
 apply plugin: 'java'
+apply plugin: 'osgi'
 
 repositories {
   mavenCentral()
+}
+
+version= "1.0.0"
+
+jar {
+  manifest {
+    name = 'Apache Thrift'
+    instruction 'Bundle-Description', 'Apache Thrift library'
+    instruction 'Bundle-License', 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    instruction 'Bundle-ActivationPolicy', 'lazy'
+  }
+  into('META-INF/') {
+    from {
+      ["../../LICENSE", "../../NOTICE"]
+    }
+  }
 }
 
 sourceSets {
