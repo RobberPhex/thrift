@@ -1,1 +1,3 @@
 rootProject.name="org.apache.thrift"
+
+include ":android"
