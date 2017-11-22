@@ -19,15 +19,13 @@
 
 package org.apache.thrift.test;
 
+import org.apache.thrift.server.ServerTestBase.TestHandler;
 import org.apache.thrift.server.THsHaServer;
+import org.apache.thrift.server.THsHaServer.Args;
 import org.apache.thrift.server.TNonblockingServer;
 import org.apache.thrift.server.TServer;
-import org.apache.thrift.server.THsHaServer.Args;
 import org.apache.thrift.transport.TNonblockingServerSocket;
-import org.apache.thrift.server.ServerTestBase.TestHandler;
-
 import thrift.test.ThriftTest;
-
 
 public class TestNonblockingServer extends TestServer {
   public static void main(String [] args) {

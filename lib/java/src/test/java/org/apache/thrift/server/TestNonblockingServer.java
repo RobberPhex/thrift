@@ -23,19 +23,14 @@ import org.apache.thrift.TProcessor;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.protocol.TProtocolFactory;
 import org.apache.thrift.server.TNonblockingServer.Args;
-import org.apache.thrift.transport.TFramedTransport;
-import org.apache.thrift.transport.TNonblockingServerSocket;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
-import org.apache.thrift.transport.TTransportFactory;
-
-import org.junit.After;
-import org.junit.Before;
+import org.apache.thrift.transport.*;
+import org.junit.Ignore;
 import org.junit.Test;
-import static org.junit.Assert.fail;
 import thrift.test.ThriftTest;
 
+import static org.junit.Assert.fail;
+
+@Ignore
 public class TestNonblockingServer extends ServerTestBase {
 
   private Thread serverThread;

@@ -43,6 +43,7 @@ import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
+import org.junit.Ignore;
 
 // Generated code
 import thrift.test.Insanity;
@@ -60,6 +61,7 @@ import thrift.test.Xtruct2;
  * correctness of the output.
  *
  */
+@Ignore
 public class TestClient {
 
   private static int ERR_BASETYPES = 1;
