@@ -31,6 +31,10 @@ stages:
   - test
   - dist
 
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install cppcheck
+
 jobs:
   include:
     # ------------------------- phase: sca ------------------------
