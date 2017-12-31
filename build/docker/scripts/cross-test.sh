@@ -1,8 +1,10 @@
 #!/bin/sh
 set -ev
 
-./bootstrap.sh
-./configure --enable-tutorial=no
+mkdir cmake-build
+cd cmake-build
+
+cmake .. -DBUILD_TUTORIALS=OFF
 make -j3 precross
 
 set +e
