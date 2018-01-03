@@ -40,8 +40,7 @@ ENV D_VERSION 2.073.2-0
 
 # Dart
 RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list && \
-    sed -i /etc/apt/sources.list.d/dart_stable.list -e 's/https:/http:/g'
+    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list
 # since ubuntu-artful can't run dart, we'll run 1.240 on xenial for now
 ENV DART_VERSION 1.24.2-1
 

@@ -27,8 +27,7 @@ RUN echo "deb http://ftp.debian.org/debian jessie-backports main" > /etc/apt/sou
 
 # Dart
 RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list && \
-    sed -i /etc/apt/sources.list.d/dart_stable.list -e 's/https:/http:/g'
+    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 `# General dependencies` \

@@ -24,8 +24,8 @@ FROM buildpack-deps:artful-scm
 MAINTAINER Apache Thrift <dev@thrift.apache.org>
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && \ 
-    apt-get dist-upgrade -y && \ 
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
       apt \
       apt-transport-https \
@@ -34,6 +34,8 @@ RUN apt-get update && \
       dirmngr \
       software-properties-common \
       wget
+
+### Add apt repos
 
 # csharp (mono) - if we ever want a later version
 # RUN echo "deb http://download.mono-project.com/repo/debian xenial main" | tee /etc/apt/sources.list.d/mono.list && \
@@ -46,8 +48,11 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /et
 # node.js (this step runs apt-get update internally) - if we ever want a later version
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 
+RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list
+
 ### install general dependencies
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 `# General dependencies` \
       bash-completion \
       bison \
@@ -92,24 +97,11 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E &&
       libevent-dev \
       libssl-dev \
       xdg-utils
-# libevent deimos doesn't seem to work so not enabling it:
-# RUN mkdir -p /usr/include/dmd/druntime/import/deimos /usr/include/dmd/druntime/import/C && \
-#     curl -sSL https://github.com/D-Programming-Deimos/libevent/archive/master.tar.gz| tar xz && \
-#     mv libevent-master/deimos/* /usr/include/dmd/druntime/import/deimos/ && \
-#     mv libevent-master/C/* /usr/include/dmd/druntime/import/C/ && \
-#     rm -rf libevent-master
-# openssl deimos doesn't work with openssl-1.0.2 so not enabling it:
-# RUN curl -sSL https://github.com/D-Programming-Deimos/openssl/archive/master.tar.gz| tar xz && \
-#     mv openssl-master/deimos/* /usr/include/dmd/druntime/import/deimos/ && \
-#     mv openssl-master/C/* /usr/include/dmd/druntime/import/C/ && \
-#     rm -rf openssl-master
 
-RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-      `# Dart dependencies` \
-      dart/stable
+
+RUN apt-get install -y --no-install-recommends \
+`# Dart dependencies` \
+      dart
 ENV PATH /usr/lib/dart/bin:$PATH
 
 RUN apt-get install -y --no-install-recommends \

@@ -25,8 +25,8 @@ FROM buildpack-deps:trusty-scm
 MAINTAINER Apache Thrift <dev@thrift.apache.org>
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && \ 
-    apt-get dist-upgrade -y && \ 
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
       apt \
       apt-transport-https \
@@ -35,6 +35,17 @@ RUN apt-get update && \
       dirmngr \
       software-properties-common \
       wget
+
+### Add apt repos
+
+# D
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E && \
+    wget http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list && \
+    wget -qO - https://dlang.org/d-keyring.gpg | apt-key add -
+
+# dart
+RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 `# General dependencies` \
@@ -66,11 +77,7 @@ RUN apt-get install -y --no-install-recommends \
 `# csharp (mono) dependencies` \
       mono-devel
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E && \
-    wget http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list && \
-    wget -qO - https://dlang.org/d-keyring.gpg | apt-key add - && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
 `# D dependencies` \
       dmd-bin=2.070.2-0 \
       libphobos2-dev=2.070.2-0 \
@@ -88,10 +95,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E &&
 #     mv openssl-master/C/* /usr/include/dmd/druntime/import/C/ && \
 #     rm -rf openssl-master
 
-RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
 `# Dart dependencies` \
       dart=1.20.1-1
 ENV PATH /usr/lib/dart/bin:$PATH
@@ -189,7 +193,7 @@ RUN apt-get install -y --no-install-recommends \
       python3-wheel \
       python3-zope.interface && \
     pip install -U ipaddress backports.ssl_match_hostname tornado && \
-    pip3 install -U backports.ssl_match_hostname tornado 
+    pip3 install -U backports.ssl_match_hostname tornado
 # installing tornado by pip/pip3 instead of debian package
 # if we install the debian package, the build fails in py2
 

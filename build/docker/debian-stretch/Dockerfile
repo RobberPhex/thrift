@@ -32,8 +32,7 @@ RUN wget http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc
 
 # Dart
 RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list && \
-    sed -i /etc/apt/sources.list.d/dart_stable.list -e 's/https:/http:/g'
+    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list
 
 # dotnet (core) 2.0.0 - project isn't ready for this yet:
 # RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg && \
@@ -44,7 +43,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
 
 
 ### install general dependencies
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 `# General dependencies` \
       bash-completion \
       bison \
