@@ -33,35 +33,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOCKER_TAG=$DOCKER_REPO:$DISTRO
 
-function dockerfile_changed {
-  # image may not exist yet, so we have to let it fail silently:
-  docker pull $DOCKER_TAG || true
-  docker run $DOCKER_TAG bash -c 'cd .. && sha512sum Dockerfile' > .Dockerfile.sha512
-  sha512sum -c .Dockerfile.sha512
-}
-
-#
-# If this build has no DOCKER_PASS and it is in the docker stage
-# then there's no reason to do any processing because we cannot
-# push the result if the Dockerfile changed.  
-#
-
-if [[ "$TRAVIS_BUILD_STAGE" == "docker" ]] && [[ -z "$DOCKER_PASS" ]]; then
-  echo Detected docker stage build and no defined DOCKER_PASS, this build job will be skipped.
-  echo Subsequent jobs in the test stage may each rebuild the docker image.
-  exit 0
-fi
-
-
-pushd ${SCRIPT_DIR}/$DISTRO
-if dockerfile_changed; then
-  echo Dockerfile has not changed.  No need to rebuild.
-  exit 0
-else
-  echo Dockerfile has changed.
-fi
-popd
-
 #
 # Dockerfile has changed - rebuild it for the current build job.
 # If it is a "docker" stage build then we want to push it back
@@ -71,12 +42,3 @@ popd
 
 echo Rebuilding docker image $DISTRO
 docker build --tag $DOCKER_TAG build/docker/$DISTRO
-
-if [[ "$TRAVIS_BUILD_STAGE" == "docker" ]] && [[ ! -z "$DOCKER_USER" ]] && [[ ! -z "$DOCKER_PASS" ]]; then 
-  echo Pushing docker image $DOCKER_TAG
-  docker login -u $DOCKER_USER -p $DOCKER_PASS
-  docker push $DOCKER_TAG
-else
-  echo Not pushing docker image: either not a docker stage build job, or one of DOCKER_USER or DOCKER_PASS is undefined.
-fi
-
