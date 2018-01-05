@@ -24,17 +24,6 @@ FROM buildpack-deps:artful-scm
 MAINTAINER Apache Thrift <dev@thrift.apache.org>
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && \
-    apt-get dist-upgrade -y && \
-    apt-get install -y --no-install-recommends \
-      apt \
-      apt-transport-https \
-      apt-utils \
-      curl \
-      dirmngr \
-      software-properties-common \
-      wget
-
 ### Add apt repos
 
 # csharp (mono) - if we ever want a later version
@@ -48,12 +37,26 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /et
 # node.js (this step runs apt-get update internally) - if we ever want a later version
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 
+# dartlang
 RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list
 
+# dlang
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E && \
+    wget http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list && \
+    wget -qO - https://dlang.org/d-keyring.gpg | apt-key add -
+
 ### install general dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-`# General dependencies` \
+      apt \
+      apt-transport-https \
+      apt-utils \
+      curl \
+      dirmngr \
+      software-properties-common \
+      wget && \
+    apt-get install -y --no-install-recommends \
+      `# General dependencies` \
       bash-completion \
       bison \
       build-essential \
@@ -83,11 +86,7 @@ RUN apt-get install -y --no-install-recommends \
 `# csharp (mono) dependencies` \
       mono-devel
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E && \
-    wget http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list && \
-    wget -qO - https://dlang.org/d-keyring.gpg | apt-key add - && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
       `# D dependencies` \
       dmd-bin \
       libphobos2-dev \
@@ -97,7 +96,6 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E &&
       libevent-dev \
       libssl-dev \
       xdg-utils
-
 
 RUN apt-get install -y --no-install-recommends \
 `# Dart dependencies` \

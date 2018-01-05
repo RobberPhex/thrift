@@ -25,17 +25,6 @@ FROM buildpack-deps:trusty-scm
 MAINTAINER Apache Thrift <dev@thrift.apache.org>
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && \
-    apt-get dist-upgrade -y && \
-    apt-get install -y --no-install-recommends \
-      apt \
-      apt-transport-https \
-      apt-utils \
-      curl \
-      dirmngr \
-      software-properties-common \
-      wget
-
 ### Add apt repos
 
 # D
@@ -48,7 +37,15 @@ RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - &
     curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-`# General dependencies` \
+      apt \
+      apt-transport-https \
+      apt-utils \
+      curl \
+      dirmngr \
+      software-properties-common \
+      wget && \
+    apt-get install -y --no-install-recommends \
+      `# General dependencies` \
       bash-completion \
       bison \
       build-essential \

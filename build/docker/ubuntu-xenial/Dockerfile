@@ -27,8 +27,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 ### Add apt repos
 
-RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y --no-install-recommends apt apt-transport-https curl wget apt-utils
-
 # csharp (mono)
 # RUN echo "deb http://download.mono-project.com/repo/debian xenial main" | tee /etc/apt/sources.list.d/mono.list && \
 #     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A6A19B38D3D831EF
@@ -55,7 +53,15 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /et
 
 ### install general dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-`# General dependencies` \
+      apt \
+      apt-transport-https \
+      apt-utils \
+      curl \
+      dirmngr \
+      software-properties-common \
+      wget && \
+    apt-get install -y --no-install-recommends \
+      `# General dependencies` \
       bash-completion \
       bison \
       build-essential \
