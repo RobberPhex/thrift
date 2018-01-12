@@ -44,11 +44,11 @@ jobs:
       env:
         - JOB="Static Code Analysis"
 
-    - stage: sca
-      script: build/travis/ubsan.sh
-      env:
-        - JOB="UBSan"
-        - BUILD_ARG="--without-python --without-py3"
+#    - stage: sca
+#      script: build/travis/ubsan.sh
+#      env:
+#        - JOB="UBSan"
+#        - BUILD_ARG="--without-python --without-py3"
 
     # ------------------------- phase: test ------------------------
     - stage: test
