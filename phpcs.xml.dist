@@ -2,7 +2,7 @@
 <ruleset name="Apache_Thrift">
     <description>The coding standard for thrift.</description>
 
-    <file>lib/php/lib</file>
+    <file>lib/php/src</file>
     <file>lib/php/test</file>
     <exclude-pattern>lib/php/test/packages/*</exclude-pattern>
 

@@ -23,7 +23,7 @@
         "squizlabs/php_codesniffer": "3.*"
     },
     "autoload": {
-        "psr-4": {"Thrift\\": "lib/php/lib/"}
+        "psr-4": {"Thrift\\": "lib/php/src/"}
     },
     "autoload-dev": {
         "psr-4": {"Test\\Thrift\\": "lib/php/test/"}
