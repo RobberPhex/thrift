@@ -317,7 +317,7 @@ class TSocket extends TTransport
         $recvTimeoutUsec_ = $this->recvTimeoutUsec_;
         $dataTotal = "";
         do {
-            $readable = self::stream_select_ex(
+            $readable = self::streamSelectEx(
                 $read,
                 $null,
                 $null,
@@ -340,13 +340,13 @@ class TSocket extends TTransport
                     $this->host_ . ':' . $this->port_);
             } else {
                 throw new TTransportException('TSocket: Could not read ' . $len . ' bytes from ' .
-                    $this->host_ . ':' . $this->port_ . " " . self::sockErr_());
+                    $this->host_ . ':' . $this->port_ . " " . self::socketError());
             }
         } while ($len > 0 && ($recvTimeoutSec_ != 0 || $recvTimeoutUsec_ != 0));
 
         if ($len > 0) {
             throw new TTransportException('TSocket: timed out reading ' . $len . ' bytes from ' .
-                $this->host_ . ':' . $this->port_ . ' ' . self::sockErr());
+                $this->host_ . ':' . $this->port_ . ' ' . self::socketError());
         }
         return $dataTotal;
     }
@@ -418,7 +418,7 @@ class TSocket extends TTransport
      * Improvement of stream_select. The tv_sec and tv_usec will be updated after the function
      *
      */
-    public static function stream_select_ex(&$read, &$write, &$except, &$tv_sec, &$tv_usec)
+    public static function streamSelectEx(&$read, &$write, &$except, &$tv_sec, &$tv_usec)
     {
         $timeout = $tv_sec * 1000000 + $tv_usec;
         $begin = gettimeofday();
@@ -433,7 +433,7 @@ class TSocket extends TTransport
         return $ret;
     }
 
-    private static function sockErr_()
+    private static function socketError()
     {
         $errno = socket_last_error();
         return "errno:" . $errno . " msg:" . socket_strerror($errno) . " ";
