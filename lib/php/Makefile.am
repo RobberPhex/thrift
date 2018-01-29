@@ -39,94 +39,94 @@ endif
 
 phpdir = $(PHP_PREFIX)/
 php_DATA = \
-  lib/TMultiplexedProcessor.php
+  src/TMultiplexedProcessor.php
 
 phpbasedir = $(phpdir)/Base
 phpbase_DATA = \
-  lib/Base/TBase.php
+  src/Base/TBase.php
 
 phpclassloaderdir = $(phpdir)/ClassLoader
 phpclassloader_DATA = \
-  lib/ClassLoader/ThriftClassLoader.php
+  src/ClassLoader/ThriftClassLoader.php
 
 phpexceptiondir = $(phpdir)/Exception
 phpexception_DATA = \
-  lib/Exception/TApplicationException.php \
-  lib/Exception/TException.php \
-  lib/Exception/TProtocolException.php \
-  lib/Exception/TTransportException.php
+  src/Exception/TApplicationException.php \
+  src/Exception/TException.php \
+  src/Exception/TProtocolException.php \
+  src/Exception/TTransportException.php
 
 phpfactorydir = $(phpdir)/Factory
 phpfactory_DATA = \
-  lib/Factory/TBinaryProtocolFactory.php \
-  lib/Factory/TCompactProtocolFactory.php \
-  lib/Factory/TJSONProtocolFactory.php \
-  lib/Factory/TProtocolFactory.php \
-  lib/Factory/TStringFuncFactory.php \
-  lib/Factory/TTransportFactory.php
+  src/Factory/TBinaryProtocolFactory.php \
+  src/Factory/TCompactProtocolFactory.php \
+  src/Factory/TJSONProtocolFactory.php \
+  src/Factory/TProtocolFactory.php \
+  src/Factory/TStringFuncFactory.php \
+  src/Factory/TTransportFactory.php
 
 phpprotocoldir = $(phpdir)/Protocol
 phpprotocol_DATA = \
-  lib/Protocol/TBinaryProtocolAccelerated.php \
-  lib/Protocol/TBinaryProtocol.php \
-  lib/Protocol/TCompactProtocol.php \
-  lib/Protocol/TJSONProtocol.php \
-  lib/Protocol/TMultiplexedProtocol.php \
-  lib/Protocol/TProtocol.php \
-  lib/Protocol/TProtocolDecorator.php \
-  lib/Protocol/TSimpleJSONProtocol.php
+  src/Protocol/TBinaryProtocolAccelerated.php \
+  src/Protocol/TBinaryProtocol.php \
+  src/Protocol/TCompactProtocol.php \
+  src/Protocol/TJSONProtocol.php \
+  src/Protocol/TMultiplexedProtocol.php \
+  src/Protocol/TProtocol.php \
+  src/Protocol/TProtocolDecorator.php \
+  src/Protocol/TSimpleJSONProtocol.php
 
 phpprotocoljsondir = $(phpprotocoldir)/JSON
 phpprotocoljson_DATA = \
-  lib/Protocol/JSON/BaseContext.php \
-  lib/Protocol/JSON/ListContext.php \
-  lib/Protocol/JSON/LookaheadReader.php \
-  lib/Protocol/JSON/PairContext.php
+  src/Protocol/JSON/BaseContext.php \
+  src/Protocol/JSON/ListContext.php \
+  src/Protocol/JSON/LookaheadReader.php \
+  src/Protocol/JSON/PairContext.php
 
 phpprotocolsimplejsondir = $(phpprotocoldir)/SimpleJSON
 phpprotocolsimplejson_DATA = \
-  lib/Protocol/SimpleJSON/CollectionMapKeyException.php \
-  lib/Protocol/SimpleJSON/Context.php \
-  lib/Protocol/SimpleJSON/ListContext.php \
-  lib/Protocol/SimpleJSON/MapContext.php \
-  lib/Protocol/SimpleJSON/StructContext.php
+  src/Protocol/SimpleJSON/CollectionMapKeyException.php \
+  src/Protocol/SimpleJSON/Context.php \
+  src/Protocol/SimpleJSON/ListContext.php \
+  src/Protocol/SimpleJSON/MapContext.php \
+  src/Protocol/SimpleJSON/StructContext.php
 
 phpserializerdir = $(phpdir)/Serializer
 phpserializer_DATA = \
-  lib/Serializer/TBinarySerializer.php
+  src/Serializer/TBinarySerializer.php
 
 phpserverdir = $(phpdir)/Server
 phpserver_DATA = \
-  lib/Server/TServerSocket.php \
-  lib/Server/TForkingServer.php \
-  lib/Server/TServer.php \
-  lib/Server/TServerTransport.php \
-  lib/Server/TSimpleServer.php
+  src/Server/TServerSocket.php \
+  src/Server/TForkingServer.php \
+  src/Server/TServer.php \
+  src/Server/TServerTransport.php \
+  src/Server/TSimpleServer.php
 
 phpstringfuncdir = $(phpdir)/StringFunc
 phpstringfunc_DATA = \
-  lib/StringFunc/Mbstring.php \
-  lib/StringFunc/Core.php \
-  lib/StringFunc/TStringFunc.php
+  src/StringFunc/Mbstring.php \
+  src/StringFunc/Core.php \
+  src/StringFunc/TStringFunc.php
 
 phptransportdir = $(phpdir)/Transport
 phptransport_DATA = \
-  lib/Transport/TBufferedTransport.php \
-  lib/Transport/TCurlClient.php \
-  lib/Transport/TFramedTransport.php \
-  lib/Transport/THttpClient.php \
-  lib/Transport/TMemoryBuffer.php \
-  lib/Transport/TNullTransport.php \
-  lib/Transport/TPhpStream.php \
-  lib/Transport/TSocket.php \
-  lib/Transport/TSocketPool.php \
-  lib/Transport/TTransport.php
+  src/Transport/TBufferedTransport.php \
+  src/Transport/TCurlClient.php \
+  src/Transport/TFramedTransport.php \
+  src/Transport/THttpClient.php \
+  src/Transport/TMemoryBuffer.php \
+  src/Transport/TNullTransport.php \
+  src/Transport/TPhpStream.php \
+  src/Transport/TSocket.php \
+  src/Transport/TSocketPool.php \
+  src/Transport/TTransport.php
 
 phptypedir = $(phpdir)/Type
 phptype_DATA = \
-  lib/Type/TMessageType.php \
-  lib/Type/TType.php \
-  lib/Type/TConstant.php
+  src/Type/TMessageType.php \
+  src/Type/TType.php \
+  src/Type/TConstant.php
 
 EXTRA_DIST = \
   lib \

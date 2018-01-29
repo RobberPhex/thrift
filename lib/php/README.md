@@ -27,7 +27,7 @@ features (i.e. APC cacheing using asbolute path URLs) as simple as possible.
 
 To use Thrift in your PHP codebase, take the following steps:
 
-1. Copy all of thrift/lib/php/lib into your PHP codebase
+1. Copy all of thrift/lib/php/src into your PHP codebase
 2. Configure Symfony Autoloader (or whatever you usually use)
 
 After that, you have to manually include the Thrift package
