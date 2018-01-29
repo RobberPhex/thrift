@@ -20,9 +20,9 @@
 #
 
 ./cleanup.sh
-if test -d lib/php/src/ext/thrift_protocol ; then
+if test -d lib/php/ext/ ; then
     if phpize -v >/dev/null 2>/dev/null ; then
-        (cd lib/php/src/ext/thrift_protocol && phpize)
+        (cd lib/php/ext/ && phpize)
     fi
 fi
 

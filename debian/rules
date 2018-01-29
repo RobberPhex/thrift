@@ -59,7 +59,7 @@ $(CURDIR)/compiler/cpp/thrift build-arch-stamp: configure-stamp
     done
 
 	# PHP
-	cd $(CURDIR)/lib/php/src/ext/thrift_protocol && \
+	cd $(CURDIR)/lib/php/ext/ && \
 		phpize && \
 		./configure && $(MAKE)
 
