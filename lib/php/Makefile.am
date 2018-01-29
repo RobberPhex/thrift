@@ -24,13 +24,13 @@ endif
 
 if WITH_PHP_EXTENSION
 %.so:
-	cd src/ext/thrift_protocol/ && $(MAKE)
+	cd ext/ && $(MAKE)
 
 phpconfdir=$(PHP_CONFIG_PREFIX)
 phpconf_DATA=thrift_protocol.ini
 
 phpmoduledir = `php-config --extension-dir`
-phpmodule_SCRIPTS = src/ext/thrift_protocol/modules/thrift_protocol.so
+phpmodule_SCRIPTS = ext/modules/thrift_protocol.so
 
 distclean-local:
 	cd $(phpmodule_SCRIPTS) && $(PHPIZE) --clean
@@ -131,15 +131,15 @@ phptype_DATA = \
 EXTRA_DIST = \
   lib \
   src/autoload.php \
-  src/ext/thrift_protocol/config.m4 \
-  src/ext/thrift_protocol/config.w32 \
-  src/ext/thrift_protocol/php_thrift_protocol.cpp \
-  src/ext/thrift_protocol/php_thrift_protocol.h \
-  src/ext/thrift_protocol/run-tests.php \
+  ext/config.m4 \
+  ext/config.w32 \
+  ext/php_thrift_protocol.cpp \
+  ext/php_thrift_protocol.h \
+  ext/thrift_protocol.ini \
+  ext/run-tests.php \
   src/Thrift.php \
   src/TStringUtils.php \
   coding_standards.md \
-  thrift_protocol.ini \
   README.apache.md \
   README.md
 
