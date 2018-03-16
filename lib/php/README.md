@@ -21,17 +21,19 @@ under the License.
 
 # Using Thrift with PHP
 
-Thrift requires PHP 5. Thrift makes as few assumptions about your PHP
+Thrift requires PHP 5.5. Thrift makes as few assumptions about your PHP
 environment as possible while trying to make some more advanced PHP
 features (i.e. APC cacheing using asbolute path URLs) as simple as possible.
 
-To use Thrift in your PHP codebase, take the following steps:
+To use Thrift, take the following steps:
 
-1. Copy all of thrift/lib/php/src into your PHP codebase
-2. Configure Symfony Autoloader (or whatever you usually use)
+1. Run `composer require apache/thrift`
+2. Configure autoload:
 
-After that, you have to manually include the Thrift package
-created by the compiler:
+```php
+$composerLoader = __DIR__ . '/vendor/autoload.php';
+$composerLoader->addPsr4('namespace', '<path>');
+```
 
 ```
 require_once 'packages/Service/Service.php';
